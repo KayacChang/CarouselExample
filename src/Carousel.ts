@@ -5,13 +5,20 @@ const SPEED = 5;
 const SLOT_COUNT = 5;
 const DISPLAY_COUNT = 3;
 
+function ViewPort(width: number, height: number) {
+  const mask = new Graphics();
+
+  mask.beginFill(0xffffff);
+  mask.drawRect(0, 0, width, height);
+  mask.endFill();
+
+  return mask;
+}
+
 export default function Carousel(getItem: () => Texture) {
   const carousel = new Container();
 
-  const items = Array(SLOT_COUNT)
-    .fill(undefined)
-    .map(() => new Sprite(getItem()));
-
+  const items = Array.from({ length: SLOT_COUNT }, () => new Sprite(getItem()));
   carousel.addChild(...items);
 
   carousel.once("added", init);
@@ -28,14 +35,10 @@ export default function Carousel(getItem: () => Texture) {
       return posX + element.width;
     }, -width * Math.floor(SLOT_COUNT / 2));
 
-    const mask = new Graphics();
-    mask.beginFill(0xffffff);
-    mask.drawRect(0, 0, width * DISPLAY_COUNT, height);
-    mask.endFill();
-    mask.x += -width * Math.floor(DISPLAY_COUNT / 2);
-
-    carousel.mask = mask;
-    carousel.addChild(mask);
+    const viewport = ViewPort(width * DISPLAY_COUNT, height);
+    viewport.x += -width * Math.floor(DISPLAY_COUNT / 2);
+    carousel.mask = viewport;
+    carousel.addChild(viewport);
   }
 
   function update(dir: DIRECTION) {

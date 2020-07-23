@@ -1,7 +1,7 @@
 {
   "name": "carousel-example",
   "version": "1.0.0",
-  "description": "PixiJS Infinte Scrolling example",
+  "description": "Carousel made with pixi.js",
   "keywords": [],
   "main": "src/index.tsx",
   "dependencies": {
